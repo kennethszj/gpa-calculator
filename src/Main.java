@@ -13,26 +13,26 @@ public class Main {
             System.out.println("4. Exit");
             System.out.print("Enter your choice: ");
 
-            int choice;
+            String choice;
             try {
-                choice = Integer.parseInt(scanner.nextLine());
+                choice = scanner.nextLine();
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a number.");
                 continue;
             }
 
-            switch (choice) {
-                case 1:
+            switch (choice.toLowerCase()) {
+                case "add":
                     addModule(manager, scanner);
                     break;
-                case 2:
+                case "delete":
                     deleteModule(manager, scanner);
                     break;
-                case 3:
+                case "list":
                     manager.listModules();
                     break;
-                case 4:
-                    System.out.println("Exiting the program. Goodbye!");
+                case "exit":
+                    System.out.println("bye");
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -40,7 +40,6 @@ public class Main {
         }
     }
 
-    // Helper to add a module
     private static void addModule(ModuleManager manager, Scanner scanner) {
         System.out.print("Enter module name: ");
         String name = scanner.nextLine();
@@ -52,14 +51,17 @@ public class Main {
         manager.addModule(module);
     }
 
-    // Helper to delete a module
     private static void deleteModule(ModuleManager manager, Scanner scanner) {
-        System.out.print("Enter the name of the module to delete: ");
-        String name = scanner.nextLine();
-        manager.deleteModule(name);
+        System.out.print("Enter the index of the module to delete: ");
+        int index = getPositiveInt(scanner, "Index must be a positive integer: ");
+        if (index >= 0) {
+            manager.deleteModule(index);
+        } else {
+            System.out.println("Invalid index. Please try again.");
+        }
     }
 
-    // Get a positive integer with validation
+
     private static int getPositiveInt(Scanner scanner, String prompt) {
         int value;
         while (true) {
@@ -77,7 +79,6 @@ public class Main {
         }
     }
 
-    // Get a valid grade between 0.0 and 5.0 or S
     private static String getValidGrade(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);

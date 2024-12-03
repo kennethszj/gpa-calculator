@@ -12,23 +12,29 @@ public class ModuleManager {
 
     // Add a module
     public void addModule(Module module) {
+        // Check for duplicate module name
+        for (Module existingModule : modules) {
+            if (existingModule.getName().equalsIgnoreCase(module.getName())) {
+                System.out.println("A module with the same name already exists. Cannot add duplicate module.");
+                return;
+            }
+        }
         modules.add(module);
         System.out.println("Module added successfully.");
         saveToFile(); // Save changes
     }
 
-    // Delete a module by name
-    public boolean deleteModule(String name) {
-        for (Module module : modules) {
-            if (module.getName().equalsIgnoreCase(name)) {
-                modules.remove(module);
-                System.out.println("Module deleted successfully.");
-                saveToFile(); // Save changes
-                return true;
-            }
+    // Delete a module by index
+    public boolean deleteModule(int index) {
+        if (index >= 0 && index < modules.size()) {
+            modules.remove(index);
+            System.out.println("Module deleted successfully.");
+            saveToFile(); // Save changes
+            return true;
+        } else {
+            System.out.println("Invalid index. Module not found.");
+            return false;
         }
-        System.out.println("Module not found.");
-        return false;
     }
 
     // List all modules and calculate GPA
@@ -42,8 +48,9 @@ public class ModuleManager {
         int totalCredits = 0;
 
         System.out.println("\nList of Modules:");
-        for (Module module : modules) {
-            System.out.println("Name: " + module.getName() +
+        for (int i = 0; i < modules.size(); i++) {
+            Module module = modules.get(i);
+            System.out.println(i + ". Name: " + module.getName() +
                     ", Credit: " + module.getCredit() +
                     ", Grade: " + module.getGrade());
 

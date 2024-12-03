@@ -1,7 +1,7 @@
 public class Module {
     private String name;
     private int credit;
-    private String grade; // Grade is now a String to accommodate 'S'
+    private String grade;
 
     // Constructor
     public Module(String name, int credit, String grade) {
