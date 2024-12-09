@@ -10,7 +10,9 @@ public class Main {
             System.out.println("1. Add Module");
             System.out.println("2. Delete Module");
             System.out.println("3. List Modules (and Calculate GPA)");
-            System.out.println("4. Exit");
+            System.out.println("4. Edit Module");
+            System.out.println("5. Exit");
+
             System.out.print("Enter your choice: ");
 
             String choice;
@@ -30,6 +32,9 @@ public class Main {
                     break;
                 case "list":
                     manager.listModules();
+                    break;
+                case "edit":
+                    editModule(manager, scanner);
                     break;
                 case "exit":
                     System.out.println("bye");
@@ -80,22 +85,49 @@ public class Main {
     }
 
     private static String getValidGrade(Scanner scanner, String prompt) {
+        String[] validGrades = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "F", "S"};
         while (true) {
             System.out.print(prompt);
-            String grade = scanner.nextLine();
-            if (grade.equalsIgnoreCase("S")) {
-                return "S";
-            }
-            try {
-                double numericGrade = Double.parseDouble(grade);
-                if (numericGrade >= 0.0 && numericGrade <= 5.0) {
+            String grade = scanner.nextLine().toUpperCase();
+            for (String validGrade : validGrades) {
+                if (grade.equals(validGrade)) {
                     return grade;
-                } else {
-                    System.out.println("Grade must be between 0.0 and 5.0, or 'S'.");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid grade.");
             }
+            System.out.println("Invalid grade. Please enter a valid grade (A+, A, A-, B+, etc.).");
         }
     }
+
+    private static void editModule(ModuleManager manager, Scanner scanner) {
+        System.out.print("Enter the index of the module to edit (starting from 1): ");
+        int index = getPositiveInt(scanner, "Index must be a positive integer: ");
+
+        // Prompt for the new module name
+        System.out.print("Enter new module name (or press Enter to keep unchanged): ");
+        String newName = scanner.nextLine();
+
+        // Prompt for the new module credit
+        System.out.print("Enter new module credit (or press Enter to keep unchanged): ");
+        String creditInput = scanner.nextLine(); // Read input as a string
+        Integer newCredit = null; // Use null to represent unchanged credit
+        if (!creditInput.isEmpty()) {
+            try {
+                newCredit = Integer.parseInt(creditInput); // Parse credit if provided
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Credit will remain unchanged.");
+            }
+        }
+
+        // Prompt for the new module grade
+        System.out.print("Enter new module grade (or press Enter to keep unchanged): ");
+        String newGrade = scanner.nextLine();
+
+        // Call the editModule method with validated inputs
+        if (!manager.editModule(index, newName.isEmpty() ? null : newName, newCredit == null ? 0 : newCredit, newGrade.isEmpty() ? null : newGrade)) {
+            System.out.println("Module edit failed.");
+        }
+    }
+
+
+
 }

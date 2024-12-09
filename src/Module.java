@@ -37,13 +37,23 @@ public class Module {
 
     // Convert grade to numeric value for GPA calculation
     public double getNumericGrade() {
-        if (grade.equalsIgnoreCase("S")) {
-            return -1; // Special marker for "S" grades
+        switch (grade.toUpperCase()) {
+            case "A+": return 5.0;
+            case "A": return 5.0;
+            case "A-": return 4.5;
+            case "B+": return 4.0;
+            case "B": return 3.5;
+            case "B-": return 3.0;
+            case "C+": return 2.5;
+            case "C": return 2.0;
+            case "D+": return 1.5;
+            case "D": return 1.0;
+            case "F": return 0.0;
+            case "S": return -1;
+            default: return -1; // Invalid or unrecognized grade
         }
-        return Double.parseDouble(grade);
     }
 
-    // toString Method
     @Override
     public String toString() {
         return "Module{name='" + name + "', credit=" + credit + ", grade='" + grade + "'}";

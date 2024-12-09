@@ -26,6 +26,7 @@ public class ModuleManager {
 
     // Delete a module by index
     public boolean deleteModule(int index) {
+        index -= 1; // Convert 1-based index to 0-based index
         if (index >= 0 && index < modules.size()) {
             modules.remove(index);
             System.out.println("Module deleted successfully.");
@@ -36,6 +37,7 @@ public class ModuleManager {
             return false;
         }
     }
+
 
     // List all modules and calculate GPA
     public void listModules() {
@@ -50,12 +52,12 @@ public class ModuleManager {
         System.out.println("\nList of Modules:");
         for (int i = 0; i < modules.size(); i++) {
             Module module = modules.get(i);
-            System.out.println(i + ". Name: " + module.getName() +
+            System.out.println((i + 1) + ". Name: " + module.getName() +
                     ", Credit: " + module.getCredit() +
                     ", Grade: " + module.getGrade());
 
             double numericGrade = module.getNumericGrade();
-            if (numericGrade >= 0) { // Exclude "S" grades from GPA
+            if (numericGrade >= 0) { // Exclude "S" grades and invalid grades
                 totalGradePoints += numericGrade * module.getCredit();
                 totalCredits += module.getCredit();
             }
@@ -68,7 +70,13 @@ public class ModuleManager {
         } else {
             System.out.println("No grades contribute to the GPA calculation.");
         }
+
+        // Display MCs completed
+        System.out.println("Total MCs: " + totalCredits);
     }
+
+
+
 
     // Save modules to a file
     private void saveToFile() {
@@ -104,4 +112,32 @@ public class ModuleManager {
             System.out.println("Error loading from file: " + e.getMessage());
         }
     }
+
+    // Edit a module by index
+    public boolean editModule(int index, String newName, int newCredit, String newGrade) {
+        index -= 1; // Convert 1-based index to 0-based index
+        if (index >= 0 && index < modules.size()) {
+            Module module = modules.get(index);
+
+            // Update module details
+            if (newName != null && !newName.isEmpty()) {
+                module.setName(newName);
+            }
+            if (newCredit > 0) {
+                module.setCredit(newCredit);
+            }
+            if (newGrade != null && !newGrade.isEmpty()) {
+                module.setGrade(newGrade);
+            }
+
+            System.out.println("Module updated successfully.");
+            saveToFile(); // Save changes
+            return true;
+        } else {
+            System.out.println("Invalid index. Module not found.");
+            return false;
+        }
+    }
+
+
 }
